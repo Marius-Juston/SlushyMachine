@@ -1,5 +1,6 @@
 package frc.robot.command;
 
+import static frc.robot.Config.SmartDashboardKeys.UserEditable.LINEAR_ACTUATOR;
 import static frc.robot.Robot.GOD_SUBSYSTEM;
 
 import edu.wpi.first.wpilibj.command.TimedCommand;
@@ -32,7 +33,7 @@ public class MoveLinearActuator extends TimedCommand {
   @Override
   protected void execute() {
 
-    double power = SmartDashboard.getNumber("Linear Actuator Power", .1);
+    double power = SmartDashboard.getNumber(LINEAR_ACTUATOR, .1);
 
     if (goingUp) {
       power = -power;

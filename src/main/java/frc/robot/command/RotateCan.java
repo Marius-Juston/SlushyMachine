@@ -18,6 +18,10 @@ public class RotateCan extends TimedCommand {
 
   public RotateCan(double rotatingCanTime) {
     this(rotatingCanTime, 1);
+
+  @Override
+  protected void initialize() {
+    System.out.println("Rotating Can");
   }
 
   @Override
@@ -28,5 +32,6 @@ public class RotateCan extends TimedCommand {
   @Override
   protected void end() {
     GOD_SUBSYSTEM.setRotateCan(0);
+    System.out.printf("Stop Rotating Can %f%n", timeSinceInitialized());
   }
 }

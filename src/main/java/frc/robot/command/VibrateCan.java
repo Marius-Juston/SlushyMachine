@@ -15,11 +15,13 @@ public class VibrateCan extends TimedCommand {
 
   @Override
   protected void initialize() {
+    System.out.println("Vibrating Can");
     GOD_SUBSYSTEM.setVibration(true);
   }
 
   @Override
   protected void end() {
+    System.out.println("Stop Vibrating Can");
     GOD_SUBSYSTEM.setVibration(false);
   }
 }

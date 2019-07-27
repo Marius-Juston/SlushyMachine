@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 public class SetVacuum extends InstantCommand {
 
   public SetVacuum(boolean isActive) {
-    super(GOD_SUBSYSTEM, () -> GOD_SUBSYSTEM.setVacuum(isActive));
+    super(GOD_SUBSYSTEM, () -> {
+      System.out.printf("Setting vacuum %b%n", isActive);
+      GOD_SUBSYSTEM.setVacuum(isActive);
+    });
   }
 }

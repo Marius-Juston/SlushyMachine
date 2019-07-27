@@ -38,12 +38,14 @@ public class MoveLinearActuator extends TimedCommand {
       power = -power;
     }
 
+    System.out.println("Setting actuator power " + power);
     GOD_SUBSYSTEM.setLinearActuator(power);
+
   }
 
   @Override
   protected void end() {
-    System.out.println("Stopping Linear Actuator");
+    System.out.printf("Stopping Linear Actuator %f%n", timeSinceInitialized());
     GOD_SUBSYSTEM.setLinearActuator(0);
   }
 }

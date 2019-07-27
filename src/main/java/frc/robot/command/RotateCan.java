@@ -1,23 +1,26 @@
 package frc.robot.command;
 
+import static frc.robot.Config.SmartDashboardKeys.UserEditable.ROTATE_CAN_0_DEGREES;
+import static frc.robot.Config.SmartDashboardKeys.UserEditable.ROTATE_CAN_180_DEGREES;
+import static frc.robot.Config.SmartDashboardKeys.UserEditable.TOLERANCE;
+import static frc.robot.Hardware.canSpinner;
 import static frc.robot.Robot.GOD_SUBSYSTEM;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * @author Marius Juston
  **/
 public class RotateCan extends TimedCommand {
 
-  private final double numberOfCompleteRotation;
-
-  public RotateCan(double rotatingCanTime, double numberOfCompleteRotation) {
-    super(rotatingCanTime, GOD_SUBSYSTEM);
-    this.numberOfCompleteRotation = numberOfCompleteRotation;
-  }
+  private boolean goingTo180Degrees = true;
 
   public RotateCan(double rotatingCanTime) {
-    this(rotatingCanTime, 1);
+    super(rotatingCanTime, GOD_SUBSYSTEM);
+  }
+
 
   @Override
   protected void initialize() {
@@ -26,7 +29,14 @@ public class RotateCan extends TimedCommand {
 
   @Override
   protected void execute() {
-    super.execute();
+    double target = SmartDashboard.getNumber(goingTo180Degrees ? ROTATE_CAN_180_DEGREES : ROTATE_CAN_0_DEGREES, 0);
+    canSpinner.set(ControlMode.Position, target);
+
+    if (Math.abs(canSpinner.getSelectedSensorPosition() - target) <= SmartDashboard.getNumber(TOLERANCE, 50)) {
+      goingTo180Degrees = !goingTo180Degrees;
+    }
+
+    System.out.printf("Can Spinner output:%f target:%f%n ", canSpinner.getMotorOutputPercent(), target);
   }
 
   @Override

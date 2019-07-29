@@ -41,6 +41,8 @@ public class Hardware {
 //    turnTable.setInverted(false);
 //    armMotor.setSensorPhase(false);
 //    armMotor.setInverted(false);
+    armMotor.setSensorPhase(false);
+    armMotor.setInverted(false);
 //    canSpinner.setSensorPhase(false);
 //    canSpinner.setInverted(false);
 
@@ -48,25 +50,26 @@ public class Hardware {
     armMotor.setStatusFramePeriod(StatusFrame.Status_10_Targets, 10, 0);
     canSpinner.setStatusFramePeriod(StatusFrame.Status_1_General, 10, 0);
 
-    turnTable.configPeakOutputForward(1);
-    turnTable.configPeakOutputReverse(1);
+    turnTable.configPeakOutputForward(.1);
+    turnTable.configPeakOutputReverse(-.1);
 
     linearActuator.configPeakOutputForward(1);
-    linearActuator.configPeakOutputReverse(1);
+    linearActuator.configPeakOutputReverse(-1);
 
     canSpinner.configPeakOutputForward(1);
-    canSpinner.configPeakOutputReverse(1);
+    canSpinner.configPeakOutputReverse(-1);
 
-    armMotor.configPeakOutputForward(1);
-    armMotor.configPeakOutputReverse(1);
+    armMotor.configPeakOutputForward(.25);
+    armMotor.configPeakOutputReverse(-.25);
 
     motorVibrator.configPeakOutputForward(1);
-    motorVibrator.configPeakOutputReverse(1);
+    motorVibrator.configPeakOutputReverse(-1);
 
     turnTable.selectProfileSlot(0, 0);
     armMotor.selectProfileSlot(0, 0);
     canSpinner.selectProfileSlot(0, 0);
 
+    armMotor.config_kP(0, 1, 10);
 //    turnTable.configForwardSoftLimitThreshold();
 //    turnTable.configReverseSoftLimitThreshold();
     turnTable.configReverseSoftLimitEnable(false, 10);

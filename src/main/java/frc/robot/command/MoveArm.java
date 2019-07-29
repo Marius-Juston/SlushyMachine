@@ -1,6 +1,7 @@
 package frc.robot.command;
 
 import static frc.robot.Config.SmartDashboardKeys.UserEditable.TOLERANCE;
+import static frc.robot.Hardware.armMotor;
 import static frc.robot.Hardware.turnTable;
 import static frc.robot.Robot.GOD_SUBSYSTEM;
 
@@ -22,18 +23,23 @@ public class MoveArm extends Command {
 
   @Override
   protected void initialize() {
-    turnTable.set(ControlMode.Position, target);
+    armMotor.set(ControlMode.Position, target);
     System.out.printf("Moving Arm to %d%n", target);
   }
 
   @Override
+  protected void execute() {
+    armMotor.set(ControlMode.MotionMagic, target);
+  }
+
+  @Override
   protected void end() {
-    turnTable.set(ControlMode.PercentOutput, 0);
-    System.out.printf("Stopping Arm. Arm Stopped at %d%n", turnTable.getSelectedSensorPosition());
+    armMotor.set(ControlMode.PercentOutput, 0);
+    System.out.printf("Stopping Arm. Arm Stopped at %d%n",armMotor.getSelectedSensorPosition());
   }
 
   @Override
   protected boolean isFinished() {
-    return Math.abs(turnTable.getSelectedSensorPosition() - target) <= SmartDashboard.getNumber(TOLERANCE, 50);
+    return Math.abs(armMotor.getSelectedSensorPosition() - target) <= SmartDashboard.getNumber(TOLERANCE, 50);
   }
 }

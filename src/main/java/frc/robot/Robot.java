@@ -147,8 +147,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber(TURRET_END_POSITION, 0);
     SmartDashboard.putNumber(TURRET_START_POSITION, 0);
 
-    SmartDashboard.putNumber(ARM_END_POSITION, 0);
+    SmartDashboard.putNumber(ARM_END_POSITION, -500);
     SmartDashboard.putNumber(ARM_START_POSITION, 0);
+
     SmartDashboard.putNumber(ROTATE_CAN_180_DEGREES, 0);
     SmartDashboard.putNumber(ROTATE_CAN_0_DEGREES, 0);
 

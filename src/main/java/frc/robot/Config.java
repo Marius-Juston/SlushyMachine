@@ -26,8 +26,6 @@ public class Config {
     public static final int CAN_SPINNER = 2;
     public static final int ARM_MOTOR = 3;
     public static final int MOTOR_VIBRATOR = 4;
-    public static final int PDP = 5;
-
   }
 
   public static final class PCM {

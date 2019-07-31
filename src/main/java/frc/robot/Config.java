@@ -21,18 +21,12 @@ public class Config {
 
   public static final class CanID {
 
-    public static final int TURN_TABLE = 10;
+    public static final int VACUUM = 10;
     public static final int LINEAR_ACTUATOR = 1;
     public static final int CAN_SPINNER = 2;
     public static final int ARM_MOTOR = 3;
     public static final int MOTOR_VIBRATOR = 4;
   }
-
-  public static final class PCM {
-
-    public static final int VACUUM = 4;
-  }
-
 
   public static final class SmartDashboardKeys {
 

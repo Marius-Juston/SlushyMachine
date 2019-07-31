@@ -9,6 +9,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+//import static frc.robot.Hardware.vacuum;
+
 /**
  * @author Marius Juston
  **/
@@ -30,13 +32,13 @@ public class GodSubsystem extends Subsystem {
   }
 
   public void setVacuum(boolean isActive) {
-    vacuum.set(isActive);
+    vacuum.set(ControlMode.PercentOutput, isActive ? 1 : -1);
   }
 
   public void setVibration(boolean isVibrating) {
     motorVibrator.set(
         ControlMode.PercentOutput,
-        isVibrating ? SmartDashboard.getNumber(VIBRATING_MOTOR_POWER, .1) : 0
+        isVibrating ? SmartDashboard.getNumber(VIBRATING_MOTOR_POWER, .25) : 0
     );
   }
 

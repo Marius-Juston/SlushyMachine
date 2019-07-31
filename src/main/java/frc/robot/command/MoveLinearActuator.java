@@ -33,7 +33,7 @@ public class MoveLinearActuator extends TimedCommand {
   @Override
   protected void execute() {
 
-    double power = SmartDashboard.getNumber(LINEAR_ACTUATOR, .1);
+    double power = SmartDashboard.getNumber(LINEAR_ACTUATOR, 1);
 
     if (goingUp) {
       power = -power;

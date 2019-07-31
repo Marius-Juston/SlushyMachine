@@ -13,8 +13,6 @@ import static frc.robot.Config.SmartDashboardKeys.Hardware.CAN_SPINNER_POSITION;
 import static frc.robot.Config.SmartDashboardKeys.Hardware.CAN_SPINNER_POWER;
 import static frc.robot.Config.SmartDashboardKeys.Hardware.LINEAR_ACTUATOR_POWER;
 import static frc.robot.Config.SmartDashboardKeys.Hardware.MOTOR_VIBRATOR;
-import static frc.robot.Config.SmartDashboardKeys.Hardware.TURN_TABLE_POSITION;
-import static frc.robot.Config.SmartDashboardKeys.Hardware.TURN_TABLE_POWER;
 import static frc.robot.Config.SmartDashboardKeys.Hardware.VACUUM;
 import static frc.robot.Config.SmartDashboardKeys.UserEditable.ARM_END_POSITION;
 import static frc.robot.Config.SmartDashboardKeys.UserEditable.ARM_START_POSITION;
@@ -32,23 +30,24 @@ import static frc.robot.Hardware.armMotor;
 import static frc.robot.Hardware.canSpinner;
 import static frc.robot.Hardware.linearActuator;
 import static frc.robot.Hardware.motorVibrator;
-import static frc.robot.Hardware.turnTable;
 import static frc.robot.Hardware.vacuum;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Config.Timing;
 import frc.robot.command.MoveArm;
 import frc.robot.command.MoveLinearActuator;
-import frc.robot.command.MoveTurret;
 import frc.robot.command.RotateCan;
 import frc.robot.command.SetVacuum;
 import frc.robot.command.VibrateCan;
 import frc.robot.subsystem.GodSubsystem;
+
+//import static frc.robot.Hardware.vacuum;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as
@@ -85,34 +84,31 @@ public class Robot extends TimedRobot {
   private void initSequencing() {
     fullSequence = new CommandGroup("Full Sequence");
 
-    double moveDownTimeout = SmartDashboard.getNumber(LINEAR_ACTUATOR_MOVE_DOWN_TIMEOUT, 2);
-    double moveUpTimeout = SmartDashboard.getNumber(LINEAR_ACTUATOR_MOVE_UP_TIMEOUT, 2);
+    double moveDownTimeout = SmartDashboard.getNumber(LINEAR_ACTUATOR_MOVE_DOWN_TIMEOUT, 2.75);
+    double moveUpTimeout = SmartDashboard.getNumber(LINEAR_ACTUATOR_MOVE_UP_TIMEOUT, 2.75);
 
     double rotatingCanTimeout = SmartDashboard.getNumber(TOTAL_ROTATION_TIME, 120);
     double vibrateCanTimeout = SmartDashboard.getNumber(TOTAL_VIBRATION_TIME, 30);
 
-    int turretEndPosition = (int) SmartDashboard.getNumber(TURRET_END_POSITION, 0);
-    int turretStartPosition = (int) SmartDashboard.getNumber(TURRET_START_POSITION, 0);
+    int armEndPosition = (int) SmartDashboard.getNumber(ARM_END_POSITION, -470);
+    int armStartPosition = (int) SmartDashboard.getNumber(ARM_START_POSITION, 70);
 
-    int armEndPosition = (int) SmartDashboard.getNumber(ARM_END_POSITION, 0);
-    int armStartPosition = (int) SmartDashboard.getNumber(ARM_START_POSITION, 0);
-
-    fullSequence.addSequential(new MoveLinearActuator(moveDownTimeout));
+    fullSequence.addSequential(new MoveLinearActuator(2));
     fullSequence.addSequential(new SetVacuum(true));
-    fullSequence.addSequential(new MoveLinearActuator(moveUpTimeout, true));
-    fullSequence.addSequential(new MoveTurret(turretEndPosition));
+    fullSequence.addSequential(new WaitCommand(1));
+    fullSequence.addSequential(new MoveLinearActuator(2.5, true));
     fullSequence.addSequential(new MoveArm(armEndPosition));
-    fullSequence.addSequential(new MoveLinearActuator(moveDownTimeout));
+    fullSequence.addSequential(new MoveLinearActuator(4.5));
 
     fullSequence.addSequential(new RotateCan(rotatingCanTimeout));
-    fullSequence.addSequential(new MoveLinearActuator(moveUpTimeout, true));
+    fullSequence.addSequential(new MoveLinearActuator(4.6, true));
     fullSequence.addSequential(new MoveArm(armStartPosition));
-    fullSequence.addSequential(new MoveTurret(turretStartPosition));
-    fullSequence.addSequential(new MoveLinearActuator(moveDownTimeout));
+    fullSequence.addSequential(new MoveLinearActuator(1.5));
+    fullSequence.addSequential(new WaitCommand(1));
+    fullSequence.addSequential(new SetVacuum(false));
+    fullSequence.addSequential(new MoveLinearActuator(1.75, true));
     fullSequence.addSequential(new VibrateCan(vibrateCanTimeout));
 
-    fullSequence.addSequential(new SetVacuum(false));
-    fullSequence.addSequential(new MoveLinearActuator(moveUpTimeout, true));
 
     if (isSimulation()) {
       fullSequence.setRunWhenDisabled(true);
@@ -135,31 +131,29 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Beverage Chooser", beverageChooser);
 
-    SmartDashboard.putNumber(LINEAR_ACTUATOR_MOVE_DOWN_TIMEOUT, 2);
-    SmartDashboard.putNumber(LINEAR_ACTUATOR_MOVE_UP_TIMEOUT, 2);
-    SmartDashboard.putNumber(LINEAR_ACTUATOR, .1);
+    SmartDashboard.putNumber(LINEAR_ACTUATOR_MOVE_DOWN_TIMEOUT, 2.75);
+    SmartDashboard.putNumber(LINEAR_ACTUATOR_MOVE_UP_TIMEOUT, 2.75);
+    SmartDashboard.putNumber(LINEAR_ACTUATOR, 1);
 
     SmartDashboard.putNumber(TOTAL_VIBRATION_TIME, 30);
-    SmartDashboard.putNumber(TOTAL_ROTATION_TIME, 120);
+    SmartDashboard.putNumber(TOTAL_ROTATION_TIME, 30);
 
     SmartDashboard.putNumber(TOLERANCE, 50);
 
     SmartDashboard.putNumber(TURRET_END_POSITION, 0);
     SmartDashboard.putNumber(TURRET_START_POSITION, 0);
 
-    SmartDashboard.putNumber(ARM_END_POSITION, -500);
+    SmartDashboard.putNumber(ARM_END_POSITION, -440);
     SmartDashboard.putNumber(ARM_START_POSITION, 0);
 
-    SmartDashboard.putNumber(ROTATE_CAN_180_DEGREES, 0);
-    SmartDashboard.putNumber(ROTATE_CAN_0_DEGREES, 0);
+    SmartDashboard.putNumber(ROTATE_CAN_180_DEGREES, 2055);
+//    SmartDashboard.putNumber(ROTATE_CAN_180_DEGREES, 4110);
+    SmartDashboard.putNumber(ROTATE_CAN_0_DEGREES, 25);
 
     getHardwareValues();
   }
 
   private void getHardwareValues() {
-    SmartDashboard.putNumber(TURN_TABLE_POWER, turnTable.getMotorOutputPercent());
-    SmartDashboard.putNumber(TURN_TABLE_POSITION, turnTable.getSelectedSensorPosition());
-
     SmartDashboard.putNumber(LINEAR_ACTUATOR_POWER, linearActuator.getMotorOutputPercent());
 
     SmartDashboard.putNumber(CAN_SPINNER_POWER, canSpinner.getMotorOutputPercent());
@@ -170,7 +164,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber(MOTOR_VIBRATOR, motorVibrator.getMotorOutputPercent());
 
-    SmartDashboard.putBoolean(VACUUM, vacuum.get());
+    SmartDashboard.putNumber(VACUUM, vacuum.getMotorOutputPercent());
 
   }
 
@@ -202,9 +196,17 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     System.out.println("Teleop Init");
+
+//    new RotateCan(10).start();
+
+//    new MoveLinearActuator(1.5).start();
+//    new SetVacuum(true).start();
+
+//    new MoveArm((int) SmartDashboard.getNumber(ARM_END_POSITION, -500)).start();
+
     initSequencing();
 
-    fullSequence.start();
+//    fullSequence.start();
   }
 
   @Override
@@ -215,9 +217,11 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     System.out.println("Test Init");
-    initSequencing();
+//    initSequencing();
 
-    fullSequence.start();
+//    new MoveArm((int) SmartDashboard.getNumber(ARM_END_POSITION, -600)).start();
+
+//    fullSequence.start();
   }
 
   @Override

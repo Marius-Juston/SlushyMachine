@@ -2,7 +2,6 @@ package frc.robot.command;
 
 import static frc.robot.Config.SmartDashboardKeys.UserEditable.TOLERANCE;
 import static frc.robot.Hardware.armMotor;
-import static frc.robot.Hardware.turnTable;
 import static frc.robot.Robot.GOD_SUBSYSTEM;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -35,7 +34,7 @@ public class MoveArm extends Command {
   @Override
   protected void end() {
     armMotor.set(ControlMode.PercentOutput, 0);
-    System.out.printf("Stopping Arm. Arm Stopped at %d%n",armMotor.getSelectedSensorPosition());
+    System.out.printf("Stopping Arm. Arm Stopped at %d%n", armMotor.getSelectedSensorPosition());
   }
 
   @Override

@@ -24,6 +24,7 @@ public class RotateCan extends TimedCommand {
 
   @Override
   protected void initialize() {
+    GOD_SUBSYSTEM.setRotateCan(0);
     System.out.println("Rotating Can");
   }
 
@@ -32,7 +33,7 @@ public class RotateCan extends TimedCommand {
     double target = SmartDashboard.getNumber(goingTo180Degrees ? ROTATE_CAN_180_DEGREES : ROTATE_CAN_0_DEGREES, 0);
     canSpinner.set(ControlMode.Position, target);
 
-    if (Math.abs(canSpinner.getSelectedSensorPosition() - target) <= SmartDashboard.getNumber(TOLERANCE, 50)) {
+    if (Math.abs(canSpinner.getSelectedSensorPosition() - target) <= 200) {
       goingTo180Degrees = !goingTo180Degrees;
     }
 
